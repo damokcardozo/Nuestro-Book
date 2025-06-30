@@ -136,18 +136,18 @@
   <script>
     const background = document.getElementById('background');
 
-    // Mostrar imágenes guardadas en localStorage
-    function loadStoredImages() {
-      const storedLinks = JSON.parse(localStorage.getItem('imageLinks') || '[]');
-      storedLinks.forEach(url => {
-        const img = document.createElement('img');
-        img.src = url;
-        background.appendChild(img);
-      });
-    }
+    // 🔽 Acá poné los links directos de imágenes que querés mostrar
+    const imageLinks = [
+      "https://raw.githubusercontent.com/mdn/beginner-html-site/gh-pages/images/firefox-icon.png",
+      "https://upload.wikimedia.org/wikipedia/commons/6/6e/Golde-cachorro.jpg"
+      // Podés agregar más imágenes acá
+    ];
 
-    window.addEventListener('load', () => {
-      loadStoredImages();
+    // Mostrar las imágenes
+    imageLinks.forEach(url => {
+      const img = document.createElement('img');
+      img.src = url;
+      background.appendChild(img);
     });
   </script>
 </body>
