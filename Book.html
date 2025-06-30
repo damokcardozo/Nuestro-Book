@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nuestro Book - Regalo de 5 meses</title>
+  <link rel="icon" href="./Icon.png" type="image/png">
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&family=Poppins&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body, html {
+      height: 100%;
+      width: 100%;
+      font-family: 'Segoe UI', sans-serif;
+      overflow-y: auto;
+      position: relative;
+      color: white;
+      background-color: rgb(85, 85, 85);
+    }
+
+    #background {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      grid-auto-rows: 200px;
+      gap: 0;
+      width: 100%;
+      z-index: 1;
+    }
+
+    #background img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      aspect-ratio: 1 / 1;
+    }
+
+    #overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 2;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      pointer-events: none;
+    }
+
+    h1, p, .upload-btn, .playlist-links {
+      pointer-events: auto;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    p {
+      font-size: 1rem;
+      max-width: 50%;
+      margin-bottom: 1.5rem;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .upload-btn {
+      background-color: #ffffff22;
+      border: 1px solid white;
+      padding: 0.5rem 1rem;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-bottom: 1rem;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .playlist-links {
+      margin-top: 1rem;
+    }
+
+    .playlist-links a {
+      color: white;
+      text-decoration: none;
+      background: rgba(255, 255, 255, 0.15);
+      padding: 0.4rem 0.8rem;
+      margin: 0.3rem;
+      border-radius: 8px;
+      display: inline-block;
+      transition: background 0.3s;
+    }
+
+    .playlist-links a:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    .footer-playlist {
+      position: fixed;
+      bottom: 10px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.95rem;
+      z-index: 3;
+    }
+
+    .footer-playlist a {
+      color: white;
+      text-decoration: none;
+      margin-left: 0.4rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      background: rgba(0,0,0,0.3);
+      padding: 0.3rem 0.6rem;
+      border-radius: 10px;
+    }
+
+    .footer-playlist img {
+      width: 16px;
+      height: 16px;
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    @media screen and (max-width: 600px) {
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      p {
+        font-size: 0.9rem;
+        max-width: 90%;
+      }
+
+      .footer-playlist {
+        font-size: 0.85rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="background"></div>
+
+  <div id="overlay">
+    <h1>Bienvenida a nuestro book</h1>
+    <p>Este es nuestro espacio. Acá podés subir tus fotos y crear un fondo con todas las fotos que vos subas, que se van a quedar en esta página por siempre.</p>
+
+    <label class="upload-btn">
+      Subir nuestras fotos
+      <input type="file" id="imageUpload" multiple accept="image/*">
+    </label>
+
+    <div class="playlist-links">
+      <!-- Links extra si querés más playlists arriba -->
+    </div>
+  </div>
+
+  <!-- 🎵 Texto fijo abajo con link + logo Spotify -->
+  <div class="footer-playlist">
+    Nuestras 50 canciones
+    <a href="https://open.spotify.com/playlist/tu_playlist_id" target="_blank">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/8/84/Spotify_icon.svg" alt="Spotify Logo">
+      Escuchar
+    </a>
+  </div>
+
+  <script>
+    const imageUpload = document.getElementById('imageUpload');
+    const background = document.getElementById('background');
+
+    imageUpload.addEventListener('change', (event) => {
+      const files = event.target.files;
+      for (let file of files) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const img = document.createElement('img');
+          img.src = e.target.result;
+          background.appendChild(img);
+        }
+        reader.readAsDataURL(file);
+      }
+    });
+  </script>
+</body>
+</html>
