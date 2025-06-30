@@ -7,7 +7,6 @@
   <link rel="icon" href="./Icon.png" type="image/png" />
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&family=Poppins&display=swap" rel="stylesheet" />
   <style>
-    /* ... (tu CSS original) ... */
     * {
       box-sizing: border-box;
       margin: 0;
@@ -57,7 +56,7 @@
       pointer-events: none;
     }
 
-    h1, p, .upload-btn, .playlist-links, #addLinksBtn, #linkInputContainer, #addLinkBtn {
+    h1, p {
       pointer-events: auto;
     }
 
@@ -72,69 +71,6 @@
       max-width: 50%;
       margin-bottom: 1.5rem;
       font-family: 'Poppins', sans-serif;
-    }
-
-    .upload-btn, #addLinksBtn {
-      background-color: #ffffff22;
-      border: 1px solid white;
-      padding: 0.5rem 1rem;
-      border-radius: 10px;
-      cursor: pointer;
-      margin-bottom: 1rem;
-      font-family: 'Poppins', sans-serif;
-      display: inline-block;
-    }
-
-    #linkInputContainer {
-      margin-bottom: 1rem;
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.5rem;
-      width: 100%;
-      max-width: 400px;
-    }
-
-    #linkInputContainer textarea {
-      width: 100%;
-      height: 80px;
-      padding: 0.5rem;
-      border-radius: 8px;
-      border: 1px solid white;
-      background: transparent;
-      color: white;
-      resize: vertical;
-      font-family: 'Poppins', sans-serif;
-      font-size: 1rem;
-    }
-
-    #addLinkBtn {
-      background-color: #1db954;
-      border: none;
-      color: white;
-      padding: 0.5rem 1rem;
-      border-radius: 10px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-
-    .playlist-links {
-      margin-top: 1rem;
-    }
-
-    .playlist-links a {
-      color: white;
-      text-decoration: none;
-      background: rgba(255, 255, 255, 0.15);
-      padding: 0.4rem 0.8rem;
-      margin: 0.3rem;
-      border-radius: 8px;
-      display: inline-block;
-      transition: background 0.3s;
-    }
-
-    .playlist-links a:hover {
-      background: rgba(255, 255, 255, 0.3);
     }
 
     .footer-playlist {
@@ -165,10 +101,6 @@
       height: 16px;
     }
 
-    input[type="file"] {
-      display: none;
-    }
-
     @media screen and (max-width: 600px) {
       h1 {
         font-size: 1.5rem;
@@ -190,23 +122,7 @@
 
   <div id="overlay">
     <h1>Bienvenida a nuestro book</h1>
-    <p>Este es nuestro espacio. Acá podés subir tus fotos y crear un fondo con todas las fotos que vos subas, que se van a quedar en esta página por siempre.</p>
-
-    <label class="upload-btn">
-      Subir nuestras fotos
-      <input type="file" id="imageUpload" multiple accept="image/*" />
-    </label>
-
-    <button id="addLinksBtn" class="upload-btn">Agregar links de imágenes</button>
-
-    <div id="linkInputContainer">
-      <textarea id="imageLinks" placeholder="Pegá aquí uno o varios links separados por coma o saltos de línea"></textarea>
-      <button id="addLinkBtn">Agregar imágenes</button>
-    </div>
-
-    <div class="playlist-links">
-      <!-- Links extra si querés más playlists arriba -->
-    </div>
+    <p>Este es nuestro espacio. Acá podés ver todas las fotos que se fueron agregando para que vivan por siempre en esta página.</p>
   </div>
 
   <div class="footer-playlist">
@@ -218,31 +134,9 @@
   </div>
 
   <script>
-    const imageUpload = document.getElementById('imageUpload');
     const background = document.getElementById('background');
 
-    const addLinksBtn = document.getElementById('addLinksBtn');
-    const linkInputContainer = document.getElementById('linkInputContainer');
-    const imageLinksTextarea = document.getElementById('imageLinks');
-    const addLinkBtn = document.getElementById('addLinkBtn');
-
-    // Función para agregar una imagen al grid y guardar localStorage
-    function addImage(url) {
-      if (!url) return;
-
-      // Evitar agregar links repetidos
-      let storedLinks = JSON.parse(localStorage.getItem('imageLinks') || '[]');
-      if (storedLinks.includes(url)) return;
-
-      storedLinks.push(url);
-      localStorage.setItem('imageLinks', JSON.stringify(storedLinks));
-
-      const img = document.createElement('img');
-      img.src = url;
-      background.appendChild(img);
-    }
-
-    // Mostrar imágenes guardadas en localStorage al cargar la página
+    // Mostrar imágenes guardadas en localStorage
     function loadStoredImages() {
       const storedLinks = JSON.parse(localStorage.getItem('imageLinks') || '[]');
       storedLinks.forEach(url => {
@@ -252,45 +146,6 @@
       });
     }
 
-    // Mostrar imágenes subidas desde archivos locales (sin guardarlas en localStorage)
-    imageUpload.addEventListener('change', (event) => {
-      const files = event.target.files;
-      for (let file of files) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          const img = document.createElement('img');
-          img.src = e.target.result;
-          background.appendChild(img);
-        };
-        reader.readAsDataURL(file);
-      }
-    });
-
-    // Toggle para mostrar/ocultar el textarea de links
-    addLinksBtn.addEventListener('click', () => {
-      if (linkInputContainer.style.display === 'flex') {
-        linkInputContainer.style.display = 'none';
-      } else {
-        linkInputContainer.style.display = 'flex';
-        imageLinksTextarea.focus();
-      }
-    });
-
-    // Agregar imágenes desde links pegados
-    addLinkBtn.addEventListener('click', () => {
-      const rawText = imageLinksTextarea.value.trim();
-      if (!rawText) return alert('Por favor, pegá uno o más links de imágenes.');
-
-      // Separar por coma, salto de línea o espacios
-      const links = rawText.split(/[\s,]+/).map(link => link.trim()).filter(Boolean);
-
-      links.forEach(link => addImage(link));
-
-      imageLinksTextarea.value = '';
-      linkInputContainer.style.display = 'none';
-    });
-
-    // Cargar imágenes guardadas al cargar la página
     window.addEventListener('load', () => {
       loadStoredImages();
     });
